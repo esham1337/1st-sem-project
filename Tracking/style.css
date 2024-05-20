@@ -1,5 +1,5 @@
 * {
-    margin: 0%;
+    margin: 0;
 }
 body {
     background-color: #18122B;
@@ -12,20 +12,39 @@ body {
     align-items: center;
 }
 .container {
-    width: 100vh;
-    height: 60vh;
+    width: 120vh; /* Increased the width */
+    height: 70vh; /* Increased the height */
+}
+.cards {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    position: absolute;
+    top: 10px;
+}
+.card {
+    width: 20vh;
+    height: 10vh;
+    background-color: rgba(57, 48, 83, 0.5); /* Transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 .child {
-    margin: 10px auto auto auto;
+    margin: 10px auto;
     border: #4b4168 0.5vh solid;
-    width: 85vh;
-    height: 50vh;
+    width: 120vh; /* Increased the width */
+    height: 70vh; /* Increased the height */
     background-color: #393053;
     cursor: url("cross_1.png") 15 15, auto;
     transition: 0.5s;
     text-align: center;
+    display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 .child:hover {
     border: #6d6487 0.5vh solid;
@@ -43,34 +62,31 @@ body {
     height: 5vh;
     border-radius: 100%;
     background-color: #c0b3f5;
-
     box-shadow: 0px 0px 25px #c0b3f5;
     position: absolute;
 }
 #score {
     font-family: 'Quantico';
-    margin: auto;
-    font-size: 3vh;
-    color: #baacbe;
-    float: left;
-}
-#mistake {
-    font-family: 'Quantico';
-    margin: auto;
     font-size: 3vh;
     color: #baacbe;
 }
 #timer {
     font-family: 'Quantico';
-    margin: auto;
     font-size: 3vh;
     color: #baacbe;
+}
+#fps {
+    font-family: 'Quantico';
+    font-size: 3vh;
+    color: #baacbe;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 #start {
     font-family: 'Quantico';
     width: 20vh;
     margin-top: 22.5vh;
-    margin-left: 32.5vh;
     border: #8173b8 2px solid;
     text-align: center;
     font-size: 3vh;

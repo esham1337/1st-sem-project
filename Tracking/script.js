@@ -7,19 +7,25 @@ const cross_2 = document.getElementById("cross_2");
 const cross_3 = document.getElementById("cross_3");
 const cross_4 = document.getElementById("cross_4");
 const screen_field = document.getElementById("screen");
-const max_X = 80;
-const max_Y = 45;
-var score = 0;
-var time = 9;
-var interval = null;
-var start_restart = true;
-var on_mouse_target = null;
-var score_interval = null;
-var move_amount = 5;
-var current_pos_x = max_X / 2;
-var current_pos_y = max_Y / 2;
-const score_time = null;
+const fps_text = document.getElementById("fps");
+const max_X = 100; // Adjusted for bigger screen
+const max_Y = 50;  // Adjusted for bigger screen
+let score = 0;
+let time = 59;
+let interval = null;
+let start_restart = true;
+let on_mouse_target = null;
+let score_interval = null;
+let move_amount = 5;
+let current_pos_x = max_X / 2;
+let current_pos_y = max_Y / 2;
+let lastFrameTime = 0;
+let frameCount = 0;
+let fps = 0;
+let score_time = null;
+
 target.style.transform = `translate(${max_X / 2}vh,${max_Y / 2}vh)`;
+
 cross_1.addEventListener("click", function() {
     screen_field.style.cursor = `url("cross_1.png") 15 15, auto`;
 });
@@ -32,7 +38,8 @@ cross_3.addEventListener("click", function() {
 cross_4.addEventListener("click", function() {
     screen_field.style.cursor = `url("cross_4.png") 5 5, auto`;
 });
-start_button.addEventListener("click", function(){
+
+start_button.addEventListener("click", function() {
     time = 59;
     score = 0;
     current_pos_x = max_X / 2;
@@ -46,33 +53,13 @@ start_button.addEventListener("click", function(){
 
     target.style.visibility = "visible";
     target.style.transition = "0.5s";
-    interval = setInterval(Timer, 1000);
+    interval = setInterval(updateTimer, 1000);
     score_time = setInterval(Score_Time, 25);
     clearInterval(score_interval);
-    
-});
-function Timer() {
-    time--;
-    if (time <= 9) {
-        timer_text.textContent = `Timer : 0${time}`; 
-    }
-    else
-        timer_text.textContent = `Timer : ${time}`; 
-    if (time <= 0) {
-        Restart();
-        clearInterval(interval);
-        clearInterval(move_interval);
-        clearInterval(score_interval)
-    }
-}
-function Restart() {
-    start_button.style.transition = "0.5s";
-    start_button.style.visibility = "visible";
-    start_button.textContent = "Restart";
 
-    target.style.transition = "0s";
-    target.style.visibility = "hidden";
-}
+    requestAnimationFrame(gameLoop);
+});
+
 target.addEventListener("mouseover", function() {
     clearInterval(score_interval);
     on_mouse_target = true;
@@ -83,52 +70,91 @@ target.addEventListener("mouseout", function() {
     on_mouse_target = false;
     score_interval = setInterval(MoveTime, 150);
 });
-function MoveOffset(){
-    if (parseInt(Math.random() * 2)) {
+
+function updateTimer() {
+    time--;
+    if (time <= 9) {
+        timer_text.textContent = `Timer : 0${time}`; 
+    } else {
+        timer_text.textContent = `Timer : ${time}`; 
+    }
+    if (time <= 0) {
+        clearInterval(interval);
+        clearInterval(score_interval);
+        clearInterval(score_time);
+        restartGame();
+    }
+}
+
+function restartGame() {
+    start_button.style.transition = "0.5s";
+    start_button.style.visibility = "visible";
+    start_button.textContent = "Restart";
+
+    target.style.transition = "0s";
+    target.style.visibility = "hidden";
+}
+
+function MoveOffset() {
+    if (Math.random() > 0.5) {
         if (current_pos_x < max_X - 5) {
             current_pos_x += Math.random() * move_amount;
-        }
-        else
+        } else {
             current_pos_x -= Math.random() * move_amount;
-    }
-    else
-    {
+        }
+    } else {
         if (current_pos_x > 5) {
             current_pos_x -= Math.random() * move_amount;
-        }
-        else
+        } else {
             current_pos_x += Math.random() * move_amount;
+        }
     }
 
-    if (parseInt(Math.random() * 2)) {
+    if (Math.random() > 0.5) {
         if (current_pos_y < max_Y - 5) {
             current_pos_y += Math.random() * move_amount;
-        }
-        else
+        } else {
             current_pos_y -= Math.random() * move_amount;
-    }
-    else
-    {
+        }
+    } else {
         if (current_pos_y > 5) {
             current_pos_y -= Math.random() * move_amount;
-        }
-        else
+        } else {
             current_pos_y += Math.random() * move_amount;
+        }
     }
 }
-function MoveTime(){
+
+function MoveTime() {
     MoveOffset();
-    
 }
-function Score_Time(){
+
+function Score_Time() {
     score_text.textContent = `Score : ${score}`;
-    target.style.transform = `translate(${(current_pos_x)}vh,${(current_pos_y)}vh)`;
+    target.style.transform = `translate(${current_pos_x}vh,${current_pos_y}vh)`;
     if (on_mouse_target && time > 0) {
-        score+=3;
-    }
-    else if(!on_mouse_target && time > 0){
+        score += 3;
+    } else if (!on_mouse_target && time > 0) {
         if (score > 0) {
             score--;
         }
+    }
+}
+
+function gameLoop(timestamp) {
+    if (lastFrameTime) {
+        frameCount++;
+        const delta = (timestamp - lastFrameTime) / 1000;
+        if (delta >= 1) {
+            fps = frameCount / delta;
+            fps_text.textContent = `FPS: ${Math.round(fps)}`;
+            frameCount = 0;
+            lastFrameTime = timestamp;
+        }
+    } else {
+        lastFrameTime = timestamp;
+    }
+    if (time > 0) {
+        requestAnimationFrame(gameLoop);
     }
 }
