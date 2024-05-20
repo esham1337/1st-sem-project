@@ -26,6 +26,7 @@ let score_time = null;
 
 target.style.transform = `translate(${max_X / 2}vh,${max_Y / 2}vh)`;
 
+// Crosshair selection logic
 cross_1.addEventListener("click", function() {
     screen_field.style.cursor = `url("cross_1.png") 15 15, auto`;
 });
@@ -39,6 +40,7 @@ cross_4.addEventListener("click", function() {
     screen_field.style.cursor = `url("cross_4.png") 5 5, auto`;
 });
 
+// Start button logic
 start_button.addEventListener("click", function() {
     time = 59;
     score = 0;
@@ -60,6 +62,7 @@ start_button.addEventListener("click", function() {
     requestAnimationFrame(gameLoop);
 });
 
+// Target hover logic
 target.addEventListener("mouseover", function() {
     clearInterval(score_interval);
     on_mouse_target = true;
@@ -97,31 +100,28 @@ function restartGame() {
 
 function MoveOffset() {
     if (Math.random() > 0.5) {
-        if (current_pos_x < max_X - 5) {
-            current_pos_x += Math.random() * move_amount;
-        } else {
-            current_pos_x -= Math.random() * move_amount;
-        }
+        current_pos_x += Math.random() * move_amount;
     } else {
-        if (current_pos_x > 5) {
-            current_pos_x -= Math.random() * move_amount;
-        } else {
-            current_pos_x += Math.random() * move_amount;
-        }
+        current_pos_x -= Math.random() * move_amount;
     }
 
     if (Math.random() > 0.5) {
-        if (current_pos_y < max_Y - 5) {
-            current_pos_y += Math.random() * move_amount;
-        } else {
-            current_pos_y -= Math.random() * move_amount;
-        }
+        current_pos_y += Math.random() * move_amount;
     } else {
-        if (current_pos_y > 5) {
-            current_pos_y -= Math.random() * move_amount;
-        } else {
-            current_pos_y += Math.random() * move_amount;
-        }
+        current_pos_y -= Math.random() * move_amount;
+    }
+
+    // Ensure the target stays within screen boundaries
+    if (current_pos_x < 0) {
+        current_pos_x = 0;
+    } else if (current_pos_x > max_X) {
+        current_pos_x = max_X;
+    }
+
+    if (current_pos_y < 0) {
+        current_pos_y = 0;
+    } else if (current_pos_y > max_Y) {
+        current_pos_y = max_Y;
     }
 }
 
