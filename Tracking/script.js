@@ -8,21 +8,24 @@ const cross_3 = document.getElementById("cross_3");
 const cross_4 = document.getElementById("cross_4");
 const screen_field = document.getElementById("screen");
 const fps_text = document.getElementById("fps");
-const max_X = 60; // Adjusted for bigger screen
-const max_Y = 30;  // Adjusted for bigger screen
-let score = 0;
-let time = 59;
-let interval = null;
-let start_restart = true;
-let on_mouse_target = null;
-let score_interval = null;
-let move_amount = 5;
-let current_pos_x = max_X / 2;
-let current_pos_y = max_Y / 2;
+
+const max_X = 80;
+const max_Y = 45;
+var score = 0;
+var time = 9;
+var interval = null;
+var start_restart = true;
+var on_mouse_target = null;
+var score_interval = null;
+var move_amount = 5;
+var current_pos_x = max_X / 2;
+var current_pos_y = max_Y / 2;
 let lastFrameTime = 0;
 let frameCount = 0;
 let fps = 0;
 let score_time = null;
+
+
 
 target.style.transform = `translate(${max_X / 2}vh,${max_Y / 2}vh)`;
 
